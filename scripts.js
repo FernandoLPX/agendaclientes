@@ -1,5 +1,5 @@
 // Substitua esta URL pela URL do Webhook do seu N8N
-const N8N_WEBHOOK_URL = 'SUA_URL_DO_WEBHOOK_DO_N8N';
+const N8N_WEBHOOK_URL = 'https://n8n.ferlp.top/webhook-test/11929e27-e8e5-444b-9fb4-8a87bad68a74';
 
 const statusMessage = document.getElementById('statusMessage');
 const toggleButton = document.getElementById('toggleButton');
