@@ -1,0 +1,155 @@
+### Variáveis
+@baseUrl = https://n8n.ferlp.top/webhook-test/11929e27-e8e5-444b-9fb4-8a87bad68a74
+
+### Teste de Criação/Atualização de Configurações do Cliente
+# Simula o Painel do Cliente enviando dados para o n8n via Webhook.
+
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "action": "SAVE_CONFIG",
+  "client_id": "CLIENTE_001",
+  "schedule_data": "Segunda a Sábado, 08h00 - 20h00",
+  "api_token": "TOKEN_SECRETO_DO_FRONTEND_001"
+}
+
+### Teste de Ligação/Desligamento do Bot
+
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "action": "TOGGLE_BOT",
+  "client_id": "CLIENTE_001",
+  "status": "ON"
+}
+
+
+
+#############################################################################
+### POST para salvar um carro
+POST {{baseUrl}}/api/carro/save HTTP/1.1
+Content-Type: application/json
+
+{
+    "nome": "Camaro",
+    "modelo": "Sport",
+    "ano": 2019,
+    "marca": {
+        "nome": "Wolkswagen",
+        "cnpj": "987654321"
+    },
+    "proprietarios": [
+        {
+            "nome": "Paulo",
+            "idade": 43
+        }
+    ]
+}
+
+{
+    "nome": "Fiesta",
+    "modelo": "Hatch",
+    "ano": 2015,
+    "marca": {
+        "nome": "Ford",
+        "cnpj": "123456789"
+    },
+    "proprietarios": [
+        {
+            "nome": "João",
+            "idade": 30
+        },
+        {
+            "nome": "Ana",
+            "idade": 32
+        }
+    ]
+}
+
+### Somente o primeiro Json é enviado, então mude a ordem dos campos para que
+###  o primeiro seja o campo que você deseja enviar
+{
+    "nome": "Gol",
+    "modelo": "Hatch",
+    "ano": 2012,
+    "marca": {
+        "nome": "Wolkswagen",
+        "cnpj": "987654321"
+    },
+    "proprietarios": [
+        {
+            "nome": "Pedro",
+            "idade": 37
+        },
+        {
+            "nome": "Maria",
+            "idade": 29
+        }
+    ]
+}
+
+#############################################################################
+### PUT para atualizar um carro
+@id = 1
+PUT {{baseUrl}}/api/carro/update/{{id}} HTTP/1.1
+Content-Type: application/json
+
+{
+    "nome": "Gol",
+    "marca": "Wolkswagen",
+    "modelo": "Hatch",
+    "ano": 2012
+}
+
+#############################################################################
+### GET para retornar todos os carros
+GET {{baseUrl}}/api/carro/findAll
+
+#############################################################################
+### GET para procurar um carro por Id
+@id = 2
+GET {{baseUrl}}/api/carro/findById/{{id}}
+
+#############################################################################
+### DELETE para deletar um carro por id
+@id = 9
+DELETE  {{baseUrl}}/api/carro/delete/{{id}} HTTP/1.1
+
+#############################################################################
+### GET para procurar todos os carro por Nome
+@nome = Fiesta
+GET {{baseUrl}}/api/carro/findByNome?nome={{nome}}
+
+#############################################################################
+### GET para procurar todos os carro por idMarca
+@idMarca = 2
+GET {{baseUrl}}/api/carro/findByMarca?idMarca={{idMarca}}
+
+#############################################################################
+### GET para procurar todos os carro com o ano acima de x
+@ano = 2015
+GET {{baseUrl}}/api/carro/findAcimaAno?ano={{ano}}
+
+
+#############################################################################
+### POST para salvar um carro
+POST {{baseUrl}}/api/carro/save HTTP/1.1
+Content-Type: application/json
+
+{
+    "nome": "",
+    "modelo": "",
+    "ano": null,
+    "marca": {
+        "nome": "JEEP",
+        "cnpj": "000000000"
+    },
+    "proprietarios": [
+        {
+            "nome": "Marcia",
+            "idade": 50
+        }
+    ]
+}
