@@ -1,7 +1,12 @@
 // Substitua esta URL pela URL do Webhook do seu N8N
-const N8N_WEBHOOK_URL = 'https://n8n.ferlp.top/webhook-test/11929e27-e8e5-444b-9fb4-8a87bad68a74';
-const N8N_STATUS_URL = 'https://n8n.ferlp.top/webhook-test/5d9aaa3c-097c-44c0-8a4d-a258b81ff363';
+const N8N_WEBHOOK_URL = 'https://n8n.ferlp.top/webhook/11929e27-e8e5-444b-9fb4-8a87bad68a74';
+// const N8N_WEBHOOK_URL = 'https://n8n.ferlp.top/webhook-test/11929e27-e8e5-444b-9fb4-8a87bad68a74';
+const N8N_STATUS_URL = 'https://n8n.ferlp.top/webhook/5d9aaa3c-097c-44c0-8a4d-a258b81ff363';
 
+const statusMessage = document.getElementById('statusMessage');
+const toggleButton = document.getElementById('toggleButton');
+
+const clientTokenInput = document.getElementById('clientToken');
 
 async function fetchBotStatus() {
     const clientToken = clientTokenInput.value;
@@ -40,11 +45,17 @@ function updateToggleButton(currentStatus) {
     toggleButton.onclick = () => toggleBot(currentStatus);
 
     // Mensagem inicial de status
-    document.getElementById('statusMessage').textContent = `🤖 Status Atual: ${currentStatus}`;
-}
+    const message = `🤖 Status Atual: ${currentStatus}`;
 
-const statusMessage = document.getElementById('statusMessage');
-const toggleButton = document.getElementById('toggleButton');
+    // 🛑 CORREÇÃO DA COR DO BLOCO DE STATUS (statusMessage)
+    // Se o status for 'OFF', isError deve ser 'true' para usar a cor vermelha.
+    const isError = currentStatus === 'OFF';
+
+    updateStatus(message, isError);
+
+    // Mensagem inicial de status
+    // document.getElementById('statusMessage').textContent = `🤖 Status Atual: ${currentStatus}`;
+}
 
 function updateStatus(message, isError = false) {
     statusMessage.textContent = message;
@@ -92,15 +103,19 @@ async function sendConfiguration() {
     }
 }
 
-async function toggleBot(newState) {
+async function toggleBot(currentState) {
     const clientToken = document.getElementById('clientToken').value;
 
+    // Define o novo estado DESEJADO (o oposto do estado atual)
+    const desiredState = currentState === 'ON' ? 'OFF' : 'ON';
+
     const payload = {
-        action: newState === 'ON' ? 'BOT_ON' : 'BOT_OFF',
+        action: 'BOT_TOGGLE', // Use uma ação única para o nó IF verificar
         client_id: clientToken,
+        status: desiredState, // 🛑 Adicione o campo 'status' para o n8n usar no SQL
     };
 
-    updateStatus(`Enviando comando para ${newState}...`);
+    updateStatus(`Enviando comando para ${desiredState}...`);
 
     try {
         const response = await fetch(N8N_WEBHOOK_URL, {
@@ -112,11 +127,11 @@ async function toggleBot(newState) {
         });
 
         if (response.ok) {
-            const nextState = newState === 'ON' ? 'OFF' : 'ON';
+            const nextState = desiredState === 'ON' ? 'OFF' : 'ON';
             toggleButton.textContent = `${nextState} BOT`;
             toggleButton.onclick = () => toggleBot(nextState);
-            toggleButton.style.backgroundColor = newState === 'ON' ? 'red' : 'green';
-            updateStatus(`Comando ${newState} enviado com sucesso. Bot no status: ${newState}.`);
+            toggleButton.style.backgroundColor = desiredState === 'ON' ? 'red' : 'green';
+            updateStatus(`Comando ${desiredState} enviado com sucesso. Bot no status: ${desiredState}.`);
         } else {
             updateStatus(`Erro ao enviar comando (Status: ${response.status}).`, true);
         }
@@ -124,9 +139,6 @@ async function toggleBot(newState) {
         updateStatus(`Erro na comunicação: ${error.message}`, true);
     }
 }
-
-// Inicializa o botão
-toggleBot('OFF'); 
 
 // Adicione esta linha no final do seu scripts.js para buscar o status a cada 5 segundos
 setInterval(fetchBotStatus, 1000); // Consulta o n8n a cada 5 segundos

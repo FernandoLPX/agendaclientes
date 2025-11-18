@@ -3,33 +3,50 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Painel de Controle Básico do Bot</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>NexusServices - Acesso</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
-    <div class="container">
-        <h2>🛠️ Configuração do Bot (Teste Rápido)</h2>
-        <p>Preencha os dados e clique em 'Salvar Configuração' para testar a comunicação com o n8n.</p>
+    <div class="container auth-container">
+        <button id="darkModeToggle" style="margin-bottom: 20px;">Ativar Modo Escuro</button>
+        <h2 id="authTitle">🔒 Login de Usuário</h2>
 
-        <label for="clientToken">Token/ID do Cliente (Simulação de Login):</label>
-        <input type="text" id="clientToken" value="CLIENTE_001" placeholder="Seu ID Único">
+        <div id="loginForm">
+            <label for="loginEmail">Email:</label>
+            <input type="email" id="loginEmail" placeholder="seu@email.com" required>
 
-        <label for="newSchedule">Nova Agenda (Texto Simples, Ex: Seg a Sex, 9h-18h):</label>
-        <textarea id="newSchedule" rows="4" placeholder="Horário de Atendimento"></textarea>
+            <label for="loginPassword">Senha:</label>
+            <input type="password" id="loginPassword" placeholder="Sua Senha" required>
 
-        <button onclick="sendConfiguration()">Salvar Configuração</button>
+            <button onclick="handleLogin()">Entrar</button>
+            <p class="auth-toggle-text">Não tem conta? <a href="#" onclick="showRegister()">Cadastre-se</a></p>
+        </div>
 
-        <hr>
+        <div id="registerForm" style="display: none;">
+            <label for="regName">Nome:</label>
+            <input type="text" id="regName" placeholder="Seu Nome" required>
 
-        <h2>🤖 Controle do Bot</h2>
-        <button id="toggleButton" onclick="toggleBot('ON')" style="background-color: green; color: white;">LIGAR
-            BOT</button>
+            <label for="regSurname">Sobrenome:</label>
+            <input type="text" id="regSurname" placeholder="Seu Sobrenome" required>
 
-        <div id="statusMessage">Aguardando ação...</div>
+            <label for="regEmail">Email:</label>
+            <input type="email" id="regEmail" placeholder="seu@email.com" required>
+
+            <label for="regCpf">CPF:</label>
+            <input type="text" id="regCpf" placeholder="000.000.000-00">
+
+            <label for="regPassword">Senha:</label>
+            <input type="password" id="regPassword" placeholder="Crie uma Senha" required>
+
+            <button onclick="handleRegister()">Cadastrar</button>
+            <p class="auth-toggle-text">Já tem conta? <a href="#" onclick="showLogin()">Fazer Login</a></p>
+        </div>
+
+        <div id="authMessage" class="status-message">Aguardando dados...</div>
     </div>
 
-    <script src="scripts.js"></script>
+    <script src="js/auth.js"></script>
 </body>
 
 </html>

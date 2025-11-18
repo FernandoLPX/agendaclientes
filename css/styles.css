@@ -1,0 +1,191 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    /* Limita a largura para formulários de autenticação */
+}
+
+h2 {
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #ccc;
+    margin: 20px 0;
+}
+
+/* Estilos Específicos para Autenticação */
+.auth-toggle-text {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.9em;
+}
+
+.auth-toggle-text a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Estilo Padrão da Mensagem de Status (Modo Claro/Neutro) */
+.status-message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+    border: 1px solid;
+    background-color: #e9ecef;
+    color: #333;
+}
+
+/* --- Estilos do Modo Escuro --- */
+
+.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+.dark-mode .container {
+    background: #1e1e1e;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode h2 {
+    color: #4da6ff;
+}
+
+.dark-mode label {
+    color: #c0c0c0;
+}
+
+.dark-mode input[type="text"],
+.dark-mode input[type="email"],
+.dark-mode input[type="password"],
+.dark-mode textarea {
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+    border: 1px solid #444;
+}
+
+.dark-mode button {
+    background-color: #0069d9;
+}
+
+.dark-mode button:hover {
+    background-color: #0056b3;
+}
+
+.dark-mode hr {
+    background: #444;
+}
+
+/* Regra Neutra no Modo Escuro (Garantindo Texto Claro em Fundo Escuro) */
+.dark-mode .status-message {
+    background-color: #2c2c2c;
+    color: #f0f0f0;
+    border: 1px solid #444;
+}
+
+/* ------------------------------------------------------------- */
+/* 🎨 REGRAS PARA ESTADOS DINÂMICOS (Versão Final Baseada em Classes) */
+/* ------------------------------------------------------------- */
+
+/* 1. ESTADO DE SUCESSO (.status-success) */
+
+/* MODO CLARO (Default) */
+.status-message.status-success {
+    background-color: #dfd; 
+    color: #0056b3; /* Texto escuro */
+    border-color: #0f0;
+}
+
+/* MODO ESCURO (Inverte para fundo escuro, texto claro) */
+.dark-mode .status-message.status-success {
+    background-color: #1a4d33; /* Verde escuro */
+    color: #a3e9c4; /* Texto claro */
+    border-color: #3b7e5a;
+}
+
+/* 2. ESTADO DE ERRO (.status-error) */
+
+/* MODO CLARO (Default) */
+.status-message.status-error {
+    background-color: #fdd; 
+    color: #8b0000; /* Texto escuro */
+    border-color: #f00;
+}
+
+/* MODO ESCURO (Inverte para fundo escuro, texto claro) */
+.dark-mode .status-message.status-error {
+    background-color: #610e0e; 
+    color: #ff9999; /* Texto claro */
+    border-color: #9d2e2e;
+}
+
+/* 3. ESTADO DE INFORMAÇÃO/AÇÃO (.status-info) */
+
+/* MODO CLARO (Default) */
+.status-message.status-info {
+    background-color: #e0f7fa; /* Azul claro */
+    color: #004d40; /* Texto escuro */
+    border-color: #00bcd4;
+}
+
+/* MODO ESCURO (Inverte para fundo escuro, texto claro) */
+.dark-mode .status-message.status-info {
+    background-color: #01579b; /* Azul ESCURO */
+    color: #e0f7fa; /* Texto CLARO */
+    border-color: #00bcd4;
+}

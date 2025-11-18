@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Painel de Controle Básico do Bot</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2>🛠️ Configuração do Bot (Teste Rápido)</h2>
+        <p>Preencha os dados e clique em 'Salvar Configuração' para testar a comunicação com o n8n.</p>
+
+        <label for="clientToken">Token/ID do Cliente (Simulação de Login):</label>
+        <input type="text" id="clientToken" value="CLIENTE_001" placeholder="Seu ID Único">
+
+        <label for="newSchedule">Nova Agenda (Texto Simples, Ex: Seg a Sex, 9h-18h):</label>
+        <textarea id="newSchedule" rows="4" placeholder="Horário de Atendimento"></textarea>
+
+        <button onclick="sendConfiguration()">Salvar Configuração</button>
+
+        <hr>
+
+        <h2>🤖 Controle do Bot</h2>
+        <button id="toggleButton" style="background-color: green; color: white;">LIGAR
+            BOT</button>
+
+        <div id="statusMessage">Aguardando ação...</div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>
