@@ -1,80 +1,40 @@
-// --- URLs dos Webhooks (Defina estes no n8n) ---
-const N8N_LOGIN_WEBHOOK = 'https://n8n.ferlp.top/webhook/seu_login_id';
-const N8N_REGISTER_WEBHOOK = 'https://n8n.ferlp.top/webhook/seu_registro_id';
+// js/auth.js - Lógica Pura de Autenticação
 
-// --- Elementos DOM ---
-const authTitle = document.getElementById('authTitle');
-const loginForm = document.getElementById('loginForm');
-const registerForm = document.getElementById('registerForm');
-const authMessage = document.getElementById('authMessage');
+// --- URLs dos Webhooks ---
+const N8N_LOGIN_WEBHOOK = 'https://n8n.ferlp.top/webhook/0c5490a9-f457-40ee-9a6f-84f8d76e225e';
+const N8N_REGISTER_WEBHOOK = 'https://n8n.ferlp.top/webhook/1eeb26b4-1de9-42b7-8ffb-6791378144bf';
 
-
-// --- Funções de Controle de UI ---
-
-// CORRIGIDO: Aceita 'type' como segundo parâmetro (ex: 'error', 'success', 'info')
-function updateAuthStatus(message, type = '') {
-    authMessage.textContent = message;
-
-    // Zera TODOS os estilos e classes de cor
-    authMessage.style.backgroundColor = '';
-    authMessage.style.borderColor = '';
-    authMessage.style.color = '';
-    authMessage.className = 'status-message'; // Volta para a classe base
-
-    if (type === 'error') {
-        // Usa classe para erro, deixando o CSS definir todas as cores
-        authMessage.classList.add('status-error');
-        // Removido: authMessage.style.backgroundColor = '#fdd';
-        // Removido: authMessage.style.borderColor = '#f00';
-    } else if (type === 'success') {
-        // Usa classe para sucesso
-        authMessage.classList.add('status-success');
-    } else if (type === 'info') {
-        // NOVO: Usa classe para info (corrigindo o problema do inline style)
-        authMessage.classList.add('status-info');
-    }
-}
-
-function showRegister() {
-    authTitle.textContent = '📝 Novo Cadastro';
-    loginForm.style.display = 'none';
-    registerForm.style.display = 'block';
-
-    // CORRIGIDO: Usando o tipo 'info'
-    updateAuthStatus('Preencha seus dados para se cadastrar.', 'info');
-}
-
-function showLogin() {
-    authTitle.textContent = '🔒 Login de Usuário';
-    loginForm.style.display = 'block';
-    registerForm.style.display = 'none';
-
-    // CORRIGIDO: Usando o tipo 'info'
-    updateAuthStatus('Digite seu email e senha para entrar.', 'info');
-}
-
-// REMOVIDA: A função updateNeutralStatus foi incorporada à lógica de updateAuthStatus.
+// As funções de UI (updateAuthStatus, showLogin) são agora importadas
+// (Ou assumidas como globais se não usar type="module")
 
 // --- Funções de Submissão ---
 
-async function handleRegister() {
+// Expõe a função para ser usada no auth_ui.js
+export async function handleRegister(event) {
+    // ... (O corpo da função handleRegister permanece inalterado, exceto pela remoção do console.log no final) ...
+
+    if (event) event.preventDefault();
+    // Coleta dados
     const data = {
         name: document.getElementById('regName').value,
         surname: document.getElementById('regSurname').value,
         email: document.getElementById('regEmail').value,
-        password: document.getElementById('regPassword').value,
         cpf: document.getElementById('regCpf').value,
+        password: document.getElementById('regPassword').value,
         // Outros dados fiscais (se necessário)
     };
 
     // Verificação básica
-    if (!data.email || !data.password || !data.name) {
+    if (!data.email || !data.password || !data.name || !data.surname || !data.cpf) {
         // CORRIGIDO: Usando o tipo 'error'
         updateAuthStatus('Preencha todos os campos obrigatórios!', 'error');
         return;
     }
 
-    // Usando status neutro (sem tipo) para indicar processamento
+    // Assumindo que updateAuthStatus e showLogin estão disponíveis globalmente ou importados
+    const updateAuthStatus = window.updateAuthStatus || console.log;
+    const showLogin = window.showLogin || function () { };
+
     updateAuthStatus('Enviando dados de cadastro...');
 
     try {
@@ -83,36 +43,39 @@ async function handleRegister() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
-
-        const result = await response.json();
+        const isJson = response.headers.get('content-type')?.includes('application/json');
+        const result = isJson ? await response.json() : { message: response.statusText };
 
         if (response.ok) {
-            // CORRIGIDO: Usando o tipo 'success'
             updateAuthStatus('Cadastro realizado com sucesso! Faça seu login.', 'success');
-            showLogin(); // Redireciona para login após sucesso
+            showLogin();
+        } else if (response.status === 409) {
+            const errorMessage = result.message || 'Email já existe.';
+            updateAuthStatus(`Falha no cadastro: ${errorMessage}`, 'error');
         } else {
-            // CORRIGIDO: Usando o tipo 'error'
-            updateAuthStatus(`Falha no cadastro: ${result.message || 'Erro desconhecido.'}`, 'error');
+            const errorMessage = result.message || result.statusText || 'Erro desconhecido.';
+            updateAuthStatus(`Falha no cadastro: ${errorMessage}`, 'error');
         }
     } catch (error) {
-        // CORRIGIDO: Usando o tipo 'error'
-        updateAuthStatus(`Erro de comunicação com o servidor: ${error.message}`, 'error');
+        updateAuthStatus(`Erro de comunicação com o servidor: ${error.message}. Verifique o CORS ou URL.`, 'error');
     }
 }
 
 
-async function handleLogin() {
+export async function handleLogin(event) {
+    if (event) event.preventDefault();
+
     const data = {
-        email: document.getElementById('loginEmail').value,
+        email: document.getElementById('loginEmail').value.trim(),
         password: document.getElementById('loginPassword').value,
     };
 
     if (!data.email || !data.password) {
-        // CORRIGIDO: Usando o tipo 'error'
         updateAuthStatus('Preencha email e senha!', 'error');
         return;
     }
 
+    const updateAuthStatus = window.updateAuthStatus || console.log;
     updateAuthStatus('Tentando autenticação...');
 
     try {
@@ -122,68 +85,71 @@ async function handleLogin() {
             body: JSON.stringify(data)
         });
 
+        let result = {};
+        const contentType = response.headers.get("content-type");
+        const isJson = contentType && contentType.includes("application/json");
+
+        // 1. LEITURA ÚNICA E CONDICIONAL DO CORPO
+        if (isJson) {
+            result = await response.json();
+        }
+
+        // 2. TRATAMENTO DE SUCESSO HTTP
         if (response.ok) {
-            const result = await response.json();
 
-            // O n8n deve retornar o API Token aqui!
-            const apiToken = result.api_token;
+            // 🚨 Correção: Acessa o primeiro item do array de resposta do n8n (result[0])
+            const dataItem = result[0];
 
-            localStorage.setItem('userToken', apiToken);
-            // CORRIGIDO: Usando o tipo 'success'
-            updateAuthStatus('Login efetuado! Redirecionando...', 'success');
+            if (!dataItem) {
+                updateAuthStatus('Login efetuado, mas o servidor não retornou dados de acesso.', 'error');
+                return;
+            }
 
-            window.location.href = 'dashboard.html';
+            const apiToken = dataItem.api_token;
 
-        } else if (response.status === 401) {
-            // CORRIGIDO: Usando o tipo 'error'
-            updateAuthStatus('Email ou senha inválidos.', 'error');
+            // Montagem dos dados do usuário
+            const userData = {
+                api_token: apiToken,
+                is_admin: dataItem.is_admin === true,
+                is_complete: dataItem.is_complete === true,
+                name: dataItem.name || 'Cliente',
+                client_id: dataItem.client_id || null
+            };
+
+            if (apiToken) {
+                localStorage.setItem('userToken', apiToken);
+                localStorage.setItem('userData', JSON.stringify(userData));
+                updateAuthStatus('Login efetuado! Redirecionando...', 'success');
+
+                // 3. REDIRECIONAMENTO E SAÍDA IMEDIATA (Impede que caia no catch)
+                window.location.href = 'dashboard.html';
+                return;
+            } else {
+                updateAuthStatus('Login efetuado, mas o servidor não retornou o token.', 'error');
+                return;
+            }
+
         } else {
-            // CORRIGIDO: Usando o tipo 'error'
-            updateAuthStatus(`Erro no login: ${response.statusText}`, 'error');
+            // 4. TRATAMENTO DE ERRO (401, 404, 500)
+            let errorMessage;
+            if (isJson) {
+                // Se era JSON, use a mensagem de erro do n8n
+                errorMessage = result.message || response.statusText;
+            } else {
+                // Se não era JSON, use o status HTTP
+                errorMessage = response.statusText || `Erro no servidor: Status ${response.status}`;
+            }
+
+            if (response.status === 401 || response.status === 404) {
+                updateAuthStatus('Email ou senha inválidos.', 'error');
+            } else {
+                updateAuthStatus(`Falha no login: ${errorMessage}`, 'error');
+            }
         }
+
     } catch (error) {
-        // CORRIGIDO: Usando o tipo 'error'
-        updateAuthStatus(`Erro de rede: ${error.message}`, 'error');
+        // 5. ERRO DE CONEXÃO REAL (CORS, URL, Timeout, etc.)
+        updateAuthStatus(`Falha na comunicação: Verifique o CORS, a URL ou a sua conexão.`, 'error');
+        console.error("Erro fatal no fetch:", error);
     }
 }
-
-// Inicializa a tela como Login
-showLogin();
-
-
-// --- Lógica do Modo Escuro ---
-
-const toggleButton = document.getElementById('darkModeToggle');
-
-function enableDarkMode() {
-    document.body.classList.add('dark-mode');
-    localStorage.setItem('darkMode', 'enabled');
-    toggleButton.textContent = 'Desativar Modo Escuro';
-}
-
-function disableDarkMode() {
-    document.body.classList.remove('dark-mode');
-    localStorage.setItem('darkMode', 'disabled');
-    toggleButton.textContent = 'Ativar Modo Escuro';
-}
-
-function setupDarkModeToggle() {
-    // 1. Carrega a preferência salva ao iniciar
-    if (localStorage.getItem('darkMode') === 'enabled') {
-        enableDarkMode();
-    } else {
-        disableDarkMode(); // Garante o texto correto do botão
-    }
-
-    // 2. Define o evento de clique
-    toggleButton.addEventListener('click', () => {
-        if (document.body.classList.contains('dark-mode')) {
-            disableDarkMode();
-        } else {
-            enableDarkMode();
-        }
-    });
-}
-
-// Chame esta função no final do seu auth.js (após showLogin())
-setupDarkModeToggle();

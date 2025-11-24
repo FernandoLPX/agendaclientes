@@ -1,0 +1,172 @@
+/* css/dashboard.css */
+
+/* --- 1. DEFINIÇÃO DE CORES (VARIÁVEIS) --- */
+:root {
+    /* Cores do MODO CLARO (Padrão) */
+    --bg-body: #f4f6f9;
+    --bg-container: #ffffff;
+    --text-main: #333333;
+    --text-secondary: #666666;
+    --input-bg: #ffffff;
+    --input-border: #cccccc; /* Cor da borda visível */
+    --input-text: #333333;
+    --primary-color: #007bff;
+    --button-text: #ffffff;
+    --status-bg-empty: transparent;
+}
+
+/* Cores do MODO ESCURO */
+body.dark-mode {
+    --bg-body: #121212;
+    --bg-container: #1e1e1e;
+    --text-main: #e0e0e0;
+    --text-secondary: #aaaaaa;
+    --input-bg: #2c2c2c;
+    --input-border: #555555; /* Borda mais clara para contrastar */
+    --input-text: #ffffff;
+    --primary-color: #1e90ff;
+    --status-bg-empty: transparent;
+}
+
+/* --- 2. ESTRUTURA GERAL --- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    transition: background-color 0.3s, color 0.3s; /* Transição suave entre modos */
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px; /* Largura ideal para formulários */
+    margin-top: 50px;
+}
+
+/* Caixa de Autenticação / Cadastro */
+.auth-box {
+    background-color: var(--bg-container);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: 1px solid var(--input-border); /* Borda sutil no container */
+}
+
+h2.form-title {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.instruction-text {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+}
+
+/* --- 3. CAMPOS DE INPUT (Corrigindo o aspecto "flutuante") --- */
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+input[type="text"],
+input[type="password"],
+textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    
+    /* Aqui está a correção das bordas: */
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border); 
+    color: var(--input-text);
+    
+    border-radius: 5px;
+    box-sizing: border-box; /* Garante que o padding não aumente a largura */
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary-color); /* Destaque ao clicar */
+}
+
+/* --- 4. BOTÕES --- */
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: opacity 0.2s;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: var(--button-text);
+    font-weight: bold;
+}
+
+.submit-button:hover {
+    opacity: 0.9;
+}
+
+.toggle-button {
+    display: block;
+    margin: 0 auto 20px auto; /* Centralizado acima da caixa */
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 8px 16px;
+}
+
+.toggle-button:hover {
+    background-color: var(--primary-color);
+    color: var(--button-text);
+}
+
+/* --- 5. MENSAGEM DE STATUS (Corrigindo a barra cinza) --- */
+.status-message {
+    padding: 0; /* Remove padding por padrão */
+    margin-bottom: 15px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 0.9rem;
+    display: none; /* ⚠️ ESCONDE POR PADRÃO */
+}
+
+/* Classes que tornam a mensagem visível */
+.status-message.status-error,
+.status-message.status-success,
+.status-message.status-info {
+    display: block; /* Mostra apenas quando tiver uma classe de tipo */
+    padding: 10px;
+}
+
+.status-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.status-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}

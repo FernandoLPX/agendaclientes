@@ -9,44 +9,76 @@
 
 <body>
     <div class="container auth-container">
-        <button id="darkModeToggle" style="margin-bottom: 20px;">Ativar Modo Escuro</button>
-        <h2 id="authTitle">🔒 Login de Usuário</h2>
 
-        <div id="loginForm">
-            <label for="loginEmail">Email:</label>
-            <input type="email" id="loginEmail" placeholder="seu@email.com" required>
-
-            <label for="loginPassword">Senha:</label>
-            <input type="password" id="loginPassword" placeholder="Sua Senha" required>
-
-            <button onclick="handleLogin()">Entrar</button>
-            <p class="auth-toggle-text">Não tem conta? <a href="#" onclick="showRegister()">Cadastre-se</a></p>
+        <div class="theme-switch-wrapper">
+            <label class="theme-switch" for="darkModeToggle">
+                <input type="checkbox" id="darkModeToggle" />
+                <div class="slider round">
+                    <svg class="sun-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path d="M12 2v2"></path>
+                        <path d="M12 20v2"></path>
+                        <path d="M4.93 4.93l1.41 1.41"></path>
+                        <path d="M17.66 17.66l1.41 1.41"></path>
+                        <path d="M2 12h2"></path>
+                        <path d="M20 12h2"></path>
+                        <path d="M6.34 17.66l-1.41 1.41"></path>
+                        <path d="M19.07 4.93l-1.41 1.41"></path>
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </div>
+            </label>
         </div>
 
-        <div id="registerForm" style="display: none;">
-            <label for="regName">Nome:</label>
-            <input type="text" id="regName" placeholder="Seu Nome" required>
+        <div class="auth-box">
 
-            <label for="regSurname">Sobrenome:</label>
-            <input type="text" id="regSurname" placeholder="Seu Sobrenome" required>
+            <h2 id="authTitle">🔒 Login de Usuário</h2>
 
-            <label for="regEmail">Email:</label>
-            <input type="email" id="regEmail" placeholder="seu@email.com" required>
+            <form id="loginForm">
+                <label for="loginEmail">Email:</label>
+                <input type="email" id="loginEmail" placeholder="seu@email.com" required>
 
-            <label for="regCpf">CPF:</label>
-            <input type="text" id="regCpf" placeholder="000.000.000-00">
+                <label for="loginPassword">Senha:</label>
+                <input type="password" id="loginPassword" placeholder="Sua Senha" required>
 
-            <label for="regPassword">Senha:</label>
-            <input type="password" id="regPassword" placeholder="Crie uma Senha" required>
+                <button type="submit" id="btnLoginAction">Entrar</button>
 
-            <button onclick="handleRegister()">Cadastrar</button>
-            <p class="auth-toggle-text">Já tem conta? <a href="#" onclick="showLogin()">Fazer Login</a></p>
+                <p class="auth-toggle-text">
+                    Não tem conta? <a href="#" onclick="showRegister(event)">Cadastre-se</a>
+                </p>
+            </form>
+
+            <form id="registerForm" style="display: none;">
+                <label for="regName">Nome:</label>
+                <input type="text" id="regName" placeholder="Seu Nome" required>
+
+                <label for="regSurname">Sobrenome:</label>
+                <input type="text" id="regSurname" placeholder="Seu Sobrenome" required>
+
+                <label for="regEmail">Email:</label>
+                <input type="email" id="regEmail" placeholder="seu@email.com" required>
+
+                <label for="regCpf">CPF:</label>
+                <input type="text" id="regCpf" placeholder="000.000.000-00">
+
+                <label for="regPassword">Senha:</label>
+                <input type="password" id="regPassword" placeholder="Crie uma Senha" required>
+
+                <button type="submit">Cadastrar</button>
+
+                <p class="auth-toggle-text">
+                    Já tem conta? <a href="#" onclick="showLogin(event)">Fazer Login</a>
+                </p>
+            </form>
+
+            <div id="authMessage" class="status-message">Aguardando dados...</div>
         </div>
-
-        <div id="authMessage" class="status-message">Aguardando dados...</div>
     </div>
 
-    <script src="js/auth.js"></script>
+    <script src="js/theme.js"></script>
+    <script type="module" src="js/auth_ui.js"></script>
 </body>
 
 </html>

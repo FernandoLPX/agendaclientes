@@ -3,33 +3,85 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Painel de Controle Básico do Bot</title>
-    <link rel="stylesheet" href="css/dashboard.css">
+    <title>Painel de Controle do Cliente</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
     <div class="container">
-        <h2>🛠️ Configuração do Bot (Teste Rápido)</h2>
-        <p>Preencha os dados e clique em 'Salvar Configuração' para testar a comunicação com o n8n.</p>
+        <div class="theme-switch-wrapper">
+            <label class="theme-switch" for="darkModeToggle">
+                <input type="checkbox" id="darkModeToggle" />
+                <div class="slider round">
+                    <svg class="sun-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path d="M12 2v2"></path>
+                        <path d="M12 20v2"></path>
+                        <path d="M4.93 4.93l1.41 1.41"></path>
+                        <path d="M17.66 17.66l1.41 1.41"></path>
+                        <path d="M2 12h2"></path>
+                        <path d="M20 12h2"></path>
+                        <path d="M6.34 17.66l-1.41 1.41"></path>
+                        <path d="M19.07 4.93l-1.41 1.41"></path>
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </div>
+            </label>
+        </div>
 
-        <label for="clientToken">Token/ID do Cliente (Simulação de Login):</label>
-        <input type="text" id="clientToken" value="CLIENTE_001" placeholder="Seu ID Único">
+        <div class="auth-box">
+            <h2 id="welcomeTitle">Olá, Cliente!</h2>
+            <p id="adminPanelLink"
+                style="display:none; color: var(--error-text); background: var(--error-bg); padding: 5px; border-radius: 4px; text-align: center;">
+                ⚠️ Painel de Administrador Ativado
+            </p>
+            <p>Aqui você gerencia seus serviços e planos.</p>
 
-        <label for="newSchedule">Nova Agenda (Texto Simples, Ex: Seg a Sex, 9h-18h):</label>
-        <textarea id="newSchedule" rows="4" placeholder="Horário de Atendimento"></textarea>
+            <hr>
 
-        <button onclick="sendConfiguration()">Salvar Configuração</button>
+            <div id="incompleteCadastroMessage" class="alert-box" style="display:none;">
+                <h3>🚨 Cadastro Incompleto!</h3>
+                <p>Seu acesso está restrito. Complete seu cadastro para liberar todos os serviços.</p>
+                <a href="cadastro.html" id="profileCompletionLink" class="button-action">
+                    Completar Agora
+                </a>
+            </div>
 
-        <hr>
+            <h3>🛒 Meus Serviços Contratados</h3>
+            <div id="servicesContainer" class="service-grid">
 
-        <h2>🤖 Controle do Bot</h2>
-        <button id="toggleButton" style="background-color: green; color: white;">LIGAR
-            BOT</button>
+                <div class="service-card" data-service-id="bot">
+                    <h3>🤖 Bot de Atendimento</h3>
+                    <p>Configure horários e respostas automáticas para seu canal.</p>
+                    <button id="accessBotButton" data-status="unavailable"
+                        onclick="checkAndRedirect('bot_config.html')">
+                        Verificar Acesso...
+                    </button>
+                    <p class="service-status" id="botStatus" style="margin-top: 10px; text-align: center;">
+                        Verificando...</p>
+                </div>
 
-        <div id="statusMessage">Aguardando ação...</div>
+                <div class="service-card disabled" data-service-id="reports">
+                    <h3>📊 Relatórios Premium</h3>
+                    <p>Acesse métricas avançadas e relatórios de desempenho.</p>
+                    <button disabled>Assinar Plano PRO</button>
+                </div>
+
+            </div>
+        </div>
     </div>
 
+    <script src="js/theme.js"></script>
     <script src="js/dashboard.js"></script>
+    <script>
+        function logout() {
+            localStorage.removeItem('userToken');
+            localStorage.removeItem('userData');
+            window.location.href = 'index.html';
+        }
+    </script>
 </body>
 
 </html>

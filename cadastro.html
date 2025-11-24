@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Completar Cadastro | Nexus Services</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div class="container auth-container">
+
+        <a href="dashboard.html" class="back-link">← Voltar para Dashboard</a>
+
+        <div class="theme-switch-wrapper">
+            <label class="theme-switch" for="darkModeToggle">
+                <input type="checkbox" id="darkModeToggle" />
+                <div class="slider round">
+                    <svg class="sun-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </div>
+            </label>
+        </div>
+
+        <div class="auth-box">
+            <h2 class="form-title">📝 Finalizar Cadastro</h2>
+            <div id="statusMessage" class="status-message"></div>
+
+            <p class="instruction-text">
+                Confirme seus dados pessoais e endereço para ativar sua conta.
+            </p>
+
+            <form id="completeRegistrationForm">
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="name">Nome</label>
+                        <input type="text" id="name" placeholder="Seu Nome" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="surname">Sobrenome</label>
+                        <input type="text" id="surname" placeholder="Sobrenome" required>
+                    </div>
+                </div>
+
+                <label for="cpf">CPF</label>
+                <input type="text" id="cpf" placeholder="000.000.000-00" required>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="phone">Telefone</label>
+                        <input type="tel" id="phone" placeholder="(00) 00000-0000" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="birthDate">Nascimento</label>
+                        <input type="date" id="birthDate" required>
+                    </div>
+                </div>
+
+                <hr>
+                <div class="input-row">
+                    <div class="input-group" style="flex: 1;">
+                        <label for="cep">CEP</label>
+                        <input type="text" id="cep" placeholder="00000-000">
+                    </div>
+                    <div class="input-group" style="flex: 1;">
+                        <label for="uf">UF</label>
+                        <input type="text" id="uf" placeholder="EX: SP" maxlength="2"
+                            style="text-transform: uppercase;">
+                    </div>
+                </div>
+
+                <label for="city">Cidade</label>
+                <input type="text" id="city" placeholder="Sua Cidade" required>
+
+                <label for="street">Logradouro (Rua/Av)</label>
+                <input type="text" id="street" placeholder="Nome da Rua" required>
+
+                <div class="input-row">
+                    <div class="input-group" style="flex: 1;">
+                        <label for="number">Número</label>
+                        <input type="text" id="number" placeholder="123" required>
+                    </div>
+                    <div class="input-group" style="flex: 2;">
+                        <label for="neighborhood">Bairro</label>
+                        <input type="text" id="neighborhood" placeholder="Seu Bairro" required>
+                    </div>
+                </div>
+
+                <label for="complement">Complemento (Opcional)</label>
+                <input type="text" id="complement" placeholder="Apto 101, Bloco B">
+
+                <button type="submit" id="submitButton" class="submit-button">
+                    Salvar Dados
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script type="module" src="js/auth_ui.js"></script>
+    <script src="js/cadastro.js"></script>
+</body>
+
+</html>
